@@ -11,6 +11,7 @@ use Blockpc\App\Console\Commands\SyncPermissionsCommand;
 use Blockpc\App\Console\Commands\SyncRolesAndPermissionsCommand;
 use Blockpc\App\Console\Commands\SyncRolesCommand;
 use Blockpc\App\Livewire\CustomModal;
+use Blockpc\App\Livewire\Examples\CreateExample;
 use Blockpc\App\Livewire\MessageAlerts;
 use Blockpc\App\Livewire\Notifications\ButtonShowNotifications;
 use Blockpc\App\Livewire\Notifications\SidebarNotification;
@@ -86,6 +87,7 @@ final class BlockpcServiceProvider extends ServiceProvider
         // Core components
         Livewire::component('message-alerts', MessageAlerts::class);
         Livewire::component('custom-modal', CustomModal::class);
+        Livewire::component('create-example', CreateExample::class);
 
         // Notification components
         Livewire::component('blockpc-btn-notifications', ButtonShowNotifications::class);
