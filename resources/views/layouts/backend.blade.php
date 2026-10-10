@@ -37,7 +37,7 @@
         </footer>
 
         <div>
-            @livewire('blockpc::sidebar-notifications', [], key('blockpc::sidebar-notifications'))
+            @livewire('blockpc-sidebar-notifications', [], key('blockpc-sidebar-notifications'))
             @livewire('custom-modal')
         </div>
         @livewireScripts
