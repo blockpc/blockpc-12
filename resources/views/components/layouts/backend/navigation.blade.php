@@ -25,7 +25,7 @@
             {{-- Settings Dropdown --}}
             <div class="flex items-center md:space-x-4">
                 <div class="h-16 flex">
-                    @livewire('blockpc::btn-notifications', [], key('blockpc::btn-notifications'))
+                    @livewire('blockpc-btn-notifications', [], key('blockpc-btn-notifications'))
                 </div>
                 <div class="h-16 flex">
                     <button id="theme-toggle" type="button" class="rounded-lg text-sm p-1">

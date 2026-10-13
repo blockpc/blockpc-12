@@ -17,7 +17,7 @@
                         <label class="label" for="permissions_keys">
                             <span>{{title(__('pages.permissions.titles.keys'))}}</span>
                         </label>
-                        <select name="permissions_keys" id="permissions_keys" class="select text-sm scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-700" title="Seleccionar por grupo" wire:model.change="key_id">
+                        <select name="permissions_keys" id="permissions_keys" class="select text-sm scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-700" title="Seleccionar por grupo" wire:model.live.change="key_id">
                             <option value="" wire:key="0">{{__('common.select')}}...</option>
                             @foreach ($this->claves as $option_key => $option_value)
                                 <option value="{{ $option_key }}" wire:key="{{ $option_key }}">{{ __('pages.permissions.keys.'. $option_value) }}</option>
