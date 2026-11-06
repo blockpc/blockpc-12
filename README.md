@@ -3,9 +3,10 @@
 Este repositorio contiene plantillas para frontend y backend para una aplicación de Laravel.
 
 ## Contenido:
+- PHP 8.4
 - Laravel 13
 - Tailwind CSS
-- Livewire 3
+- Livewire 4 (con Volt)
 - Alpine.js
 - Pest (Testing)
 
@@ -35,7 +36,7 @@ Este repositorio incluye un modelo `Profile` (one-to-one para user) y un modelo 
 Primero clona el repositorio:
 
 ```bash
-git clone https://github.com/blockpc/blockpc-11 _your-name-project_
+git clone https://github.com/blockpc/blockpc-12 _your-name-project_
 ```
 
 A continuación:
@@ -82,6 +83,23 @@ sail npm run dev
 ```bash
 sail pest -p
 ```
+
+### Tests con Tia (caché de tests)
+```bash
+sail pest --parallel --tia
+```
+
+Tia necesita conocer la rama por defecto. Ejecuta una vez por clone:
+
+```bash
+git remote set-head origin --auto
+```
+
+O defínela en `tests/Pest.php`: `pest()->tia()->defaultBranch('main');`
+
+## Componentes Livewire
+
+Los componentes del paquete se registran en `BlockpcServiceProvider` con nombres sin `::` (por ejemplo `blockpc-btn-notifications`), ya que Livewire 4 reserva esa sintaxis para namespaces.
 
 ## Cambiar remoto (importante)
 

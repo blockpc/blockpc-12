@@ -19,3 +19,6 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+# Laravel Boost - Archivos generados para asistentes de IA
+/AGENTS.md
+/.github/skills/
