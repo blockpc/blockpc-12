@@ -7,6 +7,7 @@ namespace Blockpc\App\Livewire\Notifications;
 use App\Models\User;
 use Blockpc\App\Jobs\SendNotificationToUserJob;
 use Blockpc\App\Traits\AlertBrowserEvent;
+use Illuminate\Validation\Rule;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
@@ -128,13 +129,14 @@ final class SidebarNotification extends Component
     {
         $this->validate([
             'response_type_id' => 'required|in:info,warning,danger,success',
-            'notification_user_id' => 'required|exists:users,id',
+            'notification_user_id' => ['required', 'exists:users,id', Rule::notIn([current_user()->id])],
             'response_message' => 'required|string|max:255',
         ], [
             'response_type_id.required' => 'El tipo de respuesta es obligatorio.',
             'response_type_id.exists' => 'El tipo de respuesta seleccionado no existe.',
             'notification_user_id.required' => 'El usuario destinatario es obligatorio.',
             'notification_user_id.exists' => 'El usuario seleccionado no existe.',
+            'notification_user_id.not_in' => 'No puedes enviarte una notificación a ti mismo.',
             'response_message.required' => 'El mensaje de la notificación es obligatorio.',
             'response_message.string' => 'El mensaje de la notificación debe ser un texto.',
             'response_message.max' => 'El mensaje de la notificación no puede exceder los 255 caracteres.',
@@ -146,24 +148,34 @@ final class SidebarNotification extends Component
         SendNotificationToUserJob::dispatch($this->response_message, $this->response_type_id, $this->notification_user_id, current_user()->id);
 
         $this->alert('Notificación Enviada a '.$user->fullname, 'success', 'Notificación Enviada');
-        $this->reset('notification_user_id', 'response_type_id', 'response_message', 'new_notification');
+        $this->reset('notification_user_id', 'select_user_id', 'select_user_name', 'search_user', 'response_type_id', 'response_message', 'new_notification');
     }
 
     public function open_new_notification()
     {
         $this->clearValidation();
-        $this->reset('notification_user_id', 'response_type_id', 'response_message');
+        $this->reset('notification_user_id', 'select_user_id', 'select_user_name', 'search_user', 'response_type_id', 'response_message');
         $this->new_notification = true;
     }
 
     public function close_new_notification()
     {
-        $this->reset('notification_user_id', 'response_type_id', 'response_message', 'new_notification');
+        $this->reset('notification_user_id', 'select_user_id', 'select_user_name', 'search_user', 'response_type_id', 'response_message', 'new_notification');
     }
 
-    public function select_user($user_id)
+    public function select_user(int|string $user_id): void
     {
-        dump($user_id);
+        $user = User::where('id', '!=', current_user()->id)->find($user_id);
+
+        if (! $user) {
+            $this->reset('notification_user_id', 'select_user_id', 'select_user_name');
+
+            return;
+        }
+
+        $this->notification_user_id = $user->id;
+        $this->select_user_id = $user->id;
+        $this->select_user_name = $user->fullname;
     }
 
     private function getNotifications()

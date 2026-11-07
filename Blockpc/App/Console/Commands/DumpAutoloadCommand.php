@@ -23,33 +23,21 @@ final class DumpAutoloadCommand extends Command
      */
     protected $description = 'Regenerate framework autoload files';
 
-    /**
-     * The Composer instance.
-     *
-     * @var \Illuminate\Foundation\Composer
-     */
-    protected $composer;
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct(Composer $composer)
+    public function __construct(private readonly Composer $composer)
     {
         parent::__construct();
-
-        $this->composer = $composer;
     }
 
-    /**
-     * Execute the console command.
-     *
-     * @return void
-     */
-    public function handle()
+    public function handle(): int
     {
-        $this->composer->dumpAutoloads();
+        if ($this->composer->dumpAutoloads() !== 0) {
+            $this->error('Autoload files could not be regenerated.');
+
+            return self::FAILURE;
+        }
+
         $this->info('Autoload files regenerated.');
+
+        return self::SUCCESS;
     }
 }
