@@ -15,7 +15,7 @@ use Spatie\Permission\PermissionRegistrar;
 final class RoleSynchronizerService
 {
     /**
-     * @param  array<int, array<string, mixed>>|null  $definitions  Por defecto, RoleList::all()
+     * @param  list<array{name: string, display_name: string, description: string, permissions?: list<string>, guard_name?: string, guard?: string}>|null  $definitions  Por defecto, RoleList::all()
      */
     public function __construct(private readonly ?array $definitions = null)
     {
@@ -149,7 +149,7 @@ final class RoleSynchronizerService
     }
 
     /**
-     * @param  array<string, mixed>  $roleData
+     * @param  array{name: string, display_name: string, description: string, permissions?: list<string>, guard_name?: string, guard?: string}  $roleData
      */
     private function guardOf(array $roleData): string
     {
@@ -157,7 +157,7 @@ final class RoleSynchronizerService
     }
 
     /**
-     * @return array<int, array<string, mixed>>
+     * @return list<array{name: string, display_name: string, description: string, permissions?: list<string>, guard_name?: string, guard?: string}>
      */
     private function definitions(): array
     {

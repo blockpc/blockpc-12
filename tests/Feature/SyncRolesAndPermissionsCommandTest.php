@@ -140,7 +140,8 @@ it('respeta el guard_name del rol (y el alias guard) en sync, faltantes y huérf
     expect(Role::where('name', 'api-role')->value('guard_name'))->toBe('api')
         ->and(Role::where('name', 'alias-role')->value('guard_name'))->toBe('api')
         ->and($sync->getMissing())->toBeEmpty()
-        ->and($sync->getOrphans()->pluck('name'))->not->toContain('api-role', 'alias-role');
+        ->and($sync->getOrphans()->pluck('name'))->not->toContain('api-role')
+        ->and($sync->getOrphans()->pluck('name'))->not->toContain('alias-role');
 });
 
 it('un permiso solo existente en otro guard se considera inexistente', function () {

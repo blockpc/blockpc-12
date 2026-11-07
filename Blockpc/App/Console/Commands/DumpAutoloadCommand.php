@@ -30,7 +30,12 @@ final class DumpAutoloadCommand extends Command
 
     public function handle(): int
     {
-        $this->composer->dumpAutoloads();
+        if ($this->composer->dumpAutoloads() !== 0) {
+            $this->error('Autoload files could not be regenerated.');
+
+            return self::FAILURE;
+        }
+
         $this->info('Autoload files regenerated.');
 
         return self::SUCCESS;
