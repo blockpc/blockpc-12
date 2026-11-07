@@ -60,7 +60,7 @@ return [
                 'firstname' => 'Nombre',
                 'lastname' => 'Apellido',
                 'password' => 'Clave',
-                'password_confirmation' => 'Confirmar Clave',
+                'confirmed_password' => 'Confirmar Clave',
                 'role_id' => 'Cargos',
                 'photo' => 'Imagen',
             ],
