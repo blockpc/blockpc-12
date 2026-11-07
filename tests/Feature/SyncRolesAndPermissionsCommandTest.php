@@ -8,6 +8,7 @@ use Blockpc\App\Console\Classes\PermissionList;
 use Blockpc\App\Console\Classes\RoleList;
 use Blockpc\App\Console\Services\PermissionSynchronizerService;
 use Blockpc\App\Console\Services\RoleSynchronizerService;
+use Illuminate\Support\Facades\Log;
 use Spatie\Permission\PermissionRegistrar;
 
 uses()->group('sistema', 'permissions', 'roles');
@@ -217,6 +218,7 @@ it('sync-all conserva las asignaciones de roles de los usuarios', function () {
 });
 
 it('sync-all --ci devuelve FAILURE y revierte permisos y roles si falla un rol', function () {
+    Log::spy();
     bindDefinitions(
         [permissionDefinition('x nuevo')],
         [roleDefinition('rol nuevo', ['x nuevo']), roleDefinition('rol roto', ['no existe'])]
@@ -226,11 +228,14 @@ it('sync-all --ci devuelve FAILURE y revierte permisos y roles si falla un rol',
         ->expectsOutputToContain("El permiso 'no existe'")
         ->assertExitCode(1);
 
+    Log::shouldHaveReceived('error')->once()->with('Error en blockpc:sync-all', Mockery::type('array'));
+
     expect(Permission::where('name', 'x nuevo')->exists())->toBeFalse()
         ->and(Role::where('name', 'rol nuevo')->exists())->toBeFalse();
 });
 
 it('sync-all limpia la caché de Spatie tras un rollback', function () {
+    Log::spy();
     bindDefinitions(
         [permissionDefinition('x nuevo')],
         [roleDefinition('rol roto', ['x nuevo', 'no existe'])]
@@ -295,9 +300,12 @@ it('roles-sync --prune elimina (soft delete) roles huérfanos sin usuarios y pro
 });
 
 it('roles-sync --check --ci devuelve FAILURE si falta un rol definido', function () {
+    Log::spy();
     bindDefinitions([], [roleDefinition('rol nuevo')]);
 
     $this->artisan('blockpc:roles-sync --check --ci')->assertExitCode(1);
+
+    Log::shouldHaveReceived('error')->once()->with('Errores de sincronización de roles: 1');
 });
 
 it('permissions-sync --orphans --ci no falla por huérfanos', function () {
